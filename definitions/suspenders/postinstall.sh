@@ -10,6 +10,7 @@ apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
 apt-get -y install git-core vim
 apt-get -y install libyaml-dev
+apt-get -y install libffi-dev
 
 # Setup sudo to allow no-password sudo for "admin"
 cp /etc/sudoers /etc/sudoers.orig
