@@ -39,6 +39,29 @@ cd rubygems-1.3.7
 cd ..
 rm -rf rubygems-1.3.7*
 
+# Install Python 2.7.2
+wget http://python.org/ftp/python/2.7.2/Python-2.7.2.tgz
+tar zxf Python-2.7.2.tgz
+cd Python-2.7.2
+./configure --prefix=/usr
+make
+make install
+cd ..
+rm -rf Python-2.7.2*
+
+curl -O http://pypi.python.org/packages/source/s/setuptools/setuptools-0.6c11.tar.gz
+cd setuptools-0.6c11
+python setup.py install
+cd ..
+rm -rf setuptools-0.6c11*
+
+curl -O http://pypi.python.org/packages/source/p/pip/pip-1.2.1.tar.gz
+tar zxf pip-1.2.1.tar.gz
+cd pip-1.2.1
+python setup.py install
+cd ..
+rm -rf pip-1.2.1*
+
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
