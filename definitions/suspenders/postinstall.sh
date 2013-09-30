@@ -130,7 +130,7 @@ echo 'LC_ALL="en_US.UTF-8"' >> /etc/default/locale
 
 # Qt for capybara-webkit
 apt-get -y install libxrender-dev
-wget http://download.qt-project.org/official_releases/qt/4.8/4.8.4/qt-everywhere-opensource-src-4.8.5.tar.gz
+wget http://download.qt-project.org/official_releases/qt/4.8/4.8.5/qt-everywhere-opensource-src-4.8.5.tar.gz
 tar zxvf qt-everywhere-opensource-src-4.8.5.tar.gz
 cd qt-everywhere-opensource-src-4.8.5
 ./configure -nomake examples -nomake demos -nomake docs -fast -opensource -confirm-license
