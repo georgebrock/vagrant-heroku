@@ -71,10 +71,6 @@ su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' 
 sed -i -e 's/exit 0//g' /etc/rc.local
 echo "su -c '/usr/bin/pg_ctl start -l /var/pgsql/data/log/logfile -D /var/pgsql/data' postgres" >> /etc/rc.local
 
-# Add a vagrant postgres user
-createuser -d -R -S -Upostgres vagrant
-psql -Uvagrant postgres -c 'ALTER ROLE vagrant SET client_min_messages TO WARNING;'
-
 # Install NodeJs for a JavaScript runtime
 git clone https://github.com/joyent/node.git
 cd node
@@ -178,6 +174,10 @@ tee /etc/init.d/xvfb <<-EOF
 EOF
 
 chmod +x /etc/init.d/xvfb
+
+# Add a vagrant postgres user
+createuser -d -R -S -Upostgres vagrant
+psql -Uvagrant postgres -c 'ALTER ROLE vagrant SET client_min_messages TO WARNING;'
 
 echo "Adding a 2 sec delay to the interface up, to make the dhclient happy"
 echo "pre-up sleep 2" >> /etc/network/interfaces
