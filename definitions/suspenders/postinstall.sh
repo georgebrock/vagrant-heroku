@@ -129,16 +129,16 @@ apt-get clean
 echo 'LC_ALL="en_US.UTF-8"' >> /etc/default/locale
 
 # Qt for capybara-webkit
-apt-get build-dep libqt4-core libqt4-dev
-wget http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-4.8.4.tar.gz
-tar zxvf qt-everywhere-opensource-src-4.8.4.tar.gz
-cd qt-everywhere-opensource-src-4.8.4
+apt-get -y install libxrender-dev
+wget http://download.qt-project.org/official_releases/qt/4.8/4.8.4/qt-everywhere-opensource-src-4.8.5.tar.gz
+tar zxvf qt-everywhere-opensource-src-4.8.5.tar.gz
+cd qt-everywhere-opensource-src-4.8.5
 ./configure -nomake examples -nomake demos -nomake docs -fast -opensource -confirm-license
 make
 make install
-echo 'export PATH="$PATH:/usr/local/Trolltech/Qt-4.8.4/bin"' | tee -a /home/vagrant/.bashrc
+echo 'export PATH="$PATH:/usr/local/Trolltech/Qt-4.8.5/bin"' | tee -a /home/vagrant/.bashrc
 cd ..
-rm -rf qt-everywhere-opensource-src-4.8.4*
+rm -rf qt-everywhere-opensource-src-4.8.5*
 
 # Xvfb
 apt-get -y install xvfb
