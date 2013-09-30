@@ -146,31 +146,31 @@ apt-get -y install xvfb
 export DISPLAY=:99
 echo "export DISPLAY=${DISPLAY}" >> /home/vagrant/.bashrc
 tee /etc/init.d/xvfb <<-EOF
-  #!/bin/bash
+#!/bin/bash
 
-  XVFB=/usr/bin/Xvfb
-  XVFBARGS="\$DISPLAY -ac -screen 0 1024x768x16"
-  PIDFILE=\${HOME}/xvfb_\${DISPLAY:1}.pid
-  case "\$1" in
-    start)
-      echo -n "Starting virtual X frame buffer: Xvfb"
-      /sbin/start-stop-daemon --start --quiet --pidfile \$PIDFILE --make-pidfile --background --exec \$XVFB -- \$XVFBARGS
-      echo "."
-      ;;
-    stop)
-      echo -n "Stopping virtual X frame buffer: Xvfb"
-      /sbin/start-stop-daemon --stop --quiet --pidfile \$PIDFILE
-      echo "."
-      ;;
-    restart)
-      \$0 stop
-      \$0 start
-      ;;
-    *)
-      echo "Usage: /etc/init.d/xvfb {start|stop|restart}"
-      exit 1
-  esac
-  exit 0
+XVFB=/usr/bin/Xvfb
+XVFBARGS="\$DISPLAY -ac -screen 0 1024x768x16"
+PIDFILE=\${HOME}/xvfb_\${DISPLAY:1}.pid
+case "\$1" in
+start)
+  echo -n "Starting virtual X frame buffer: Xvfb"
+  /sbin/start-stop-daemon --start --quiet --pidfile \$PIDFILE --make-pidfile --background --exec \$XVFB -- \$XVFBARGS
+  echo "."
+  ;;
+stop)
+  echo -n "Stopping virtual X frame buffer: Xvfb"
+  /sbin/start-stop-daemon --stop --quiet --pidfile \$PIDFILE
+  echo "."
+  ;;
+restart)
+  \$0 stop
+  \$0 start
+  ;;
+*)
+  echo "Usage: /etc/init.d/xvfb {start|stop|restart}"
+  exit 1
+esac
+exit 0
 EOF
 
 chmod +x /etc/init.d/xvfb
