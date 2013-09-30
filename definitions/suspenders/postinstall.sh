@@ -145,6 +145,7 @@ apt-get -y install xvfb
 
 export DISPLAY=:99
 echo "export DISPLAY=${DISPLAY}" >> /etc/profile.d/display.sh
+echo "DISPLAY=${DISPLAY} /etc/init.d/xvfb start" >> /etc/rc.local
 tee /etc/init.d/xvfb <<-EOF
 #!/bin/bash
 
