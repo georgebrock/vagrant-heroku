@@ -136,7 +136,7 @@ cd qt-everywhere-opensource-src-4.8.5
 ./configure -nomake examples -nomake demos -nomake docs -fast -opensource -confirm-license
 make
 make install
-echo 'export PATH="$PATH:/usr/local/Trolltech/Qt-4.8.5/bin"' | tee -a /home/vagrant/.bashrc
+echo 'PATH=$PATH:/usr/local/Trolltech/Qt-4.8.5/bin'> /etc/profile.d/qt.sh
 cd ..
 rm -rf qt-everywhere-opensource-src-4.8.5*
 
@@ -144,7 +144,7 @@ rm -rf qt-everywhere-opensource-src-4.8.5*
 apt-get -y install xvfb
 
 export DISPLAY=:99
-echo "export DISPLAY=${DISPLAY}" >> /home/vagrant/.bashrc
+echo "export DISPLAY=${DISPLAY}" >> /etc/profile.d/display.sh
 tee /etc/init.d/xvfb <<-EOF
 #!/bin/bash
 
