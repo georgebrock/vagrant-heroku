@@ -10,6 +10,10 @@ apt-get -y install linux-headers-$(uname -r) build-essential
 apt-get -y install zlib1g-dev libssl-dev libreadline5-dev
 apt-get -y install git-core vim
 
+# Apt-install python tools and libraries
+# libpq-dev lets us compile psycopg for Postgres
+apt-get -y install python-setuptools python-dev libpq-dev pep8
+
 # Setup sudo to allow no-password sudo for "admin"
 cp /etc/sudoers /etc/sudoers.orig
 sed -i -e '/Defaults\s\+env_reset/a Defaults\texempt_group=admin' /etc/sudoers
@@ -20,24 +24,24 @@ apt-get -y install nfs-common
 
 # Install Ruby from source in /opt so that users of Vagrant
 # can install their own Rubies using packages or however.
-wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.2-p290.tar.gz
-tar xvzf ruby-1.9.2-p290.tar.gz
-cd ruby-1.9.2-p290
+wget http://ftp.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p247.tar.bz2
+tar jxf ruby-2.0.0-p247.tar.bz2
+cd ruby-2.0.0-p247
 ./configure --prefix=/opt/ruby
 make
 make install
 cd ..
-rm -rf ruby-1.9.2-p290*
+rm -rf ruby-2.0.0-p247*
 chown -R root:admin /opt/ruby
 chmod -R g+w /opt/ruby
 
-# Install RubyGems 1.3.7
-wget http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz
-tar xzf rubygems-1.3.7.tgz
-cd rubygems-1.3.7
+# Install RubyGems 2.0.3
+wget http://production.cf.rubygems.org/rubygems/rubygems-2.0.3.tgz
+tar xzf rubygems-2.0.3.tgz
+cd rubygems-2.0.3
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-1.3.7*
+rm -rf rubygems-2.0.3*
 
 # Install Python 2.7.2
 wget http://python.org/ftp/python/2.7.2/Python-2.7.2.tgz
@@ -67,15 +71,30 @@ rm -rf pip-1.2.1*
 /opt/ruby/bin/gem install puppet --no-ri --no-rdoc
 /opt/ruby/bin/gem install bundler --no-ri --no-rdoc
 
-# Install PostgreSQL 9.1.5
-wget http://ftp.postgresql.org/pub/source/v9.1.5/postgresql-9.1.5.tar.gz
-tar xzf postgresql-9.1.5.tar.gz
-cd postgresql-9.1.5
+# Add the Puppet group so Puppet runs without issue
+groupadd puppet
+
+# Install Foreman
+/opt/ruby/bin/gem install foreman --no-ri --no-rdoc
+
+# Install pip, virtualenv, and virtualenvwrapper
+easy_install pip
+pip install virtualenv
+pip install virtualenvwrapper
+
+# Add a basic virtualenvwrapper config to .bashrc
+echo "export WORKON_HOME=/home/vagrant/.virtualenvs" >> /home/vagrant/.bashrc
+echo "source /usr/local/bin/virtualenvwrapper.sh" >> /home/vagrant/.bashrc
+
+# Install PostgreSQL 9.2.4
+wget http://ftp.postgresql.org/pub/source/v9.2.4/postgresql-9.2.4.tar.bz2
+tar jxf postgresql-9.2.4.tar.bz2
+cd postgresql-9.2.4
 ./configure --prefix=/usr
-make
+make world
 make install
 cd ..
-rm -rf postgresql-9.1.5*
+rm -rf postgresql-9.2.4*
 
 # Initialize postgres DB
 useradd -p postgres postgres
@@ -104,7 +123,7 @@ rm -rf node*
 
 # Add /opt/ruby/bin to the global path as the last resort so
 # Ruby, RubyGems, and Chef/Puppet are visible
-echo 'PATH=$PATH:/opt/ruby/bin/'> /etc/profile.d/vagrantruby.sh
+echo 'PATH=$PATH:/opt/ruby/bin' > /etc/profile.d/vagrantruby.sh
 
 # Installing vagrant keys
 mkdir /home/vagrant/.ssh
@@ -116,8 +135,7 @@ chown -R vagrant /home/vagrant/.ssh
 
 # Installing the virtualbox guest additions
 VBOX_VERSION=$(cat /home/vagrant/.vbox_version)
-cd /tmp
-wget http://download.virtualbox.org/virtualbox/$VBOX_VERSION/VBoxGuestAdditions_$VBOX_VERSION.iso
+cd /home/vagrant
 mount -o loop VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
 sh /mnt/VBoxLinuxAdditions.run
 umount /mnt
@@ -140,6 +158,9 @@ mkdir /etc/udev/rules.d/70-persistent-net.rules
 rm -rf /dev/.udev/
 rm /lib/udev/rules.d/75-persistent-net-generator.rules
 
+# Install Heroku toolbelt
+wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+
 # Install some libraries
 apt-get -y install libxml2-dev libxslt-dev curl libcurl4-openssl-dev
 apt-get -y install imagemagick libmagickcore-dev libmagickwand-dev
@@ -147,6 +168,9 @@ apt-get clean
 
 # Set locale
 echo 'LC_ALL="en_US.UTF-8"' >> /etc/default/locale
+
+# Add 'vagrant' role
+su -c 'createuser vagrant -s' postgres
 
 echo "Adding a 2 sec delay to the interface up, to make the dhclient happy"
 echo "pre-up sleep 2" >> /etc/network/interfaces
