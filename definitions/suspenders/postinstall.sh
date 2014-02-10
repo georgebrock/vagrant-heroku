@@ -33,13 +33,13 @@ rm -rf ruby-2.1.0*
 chown -R root:admin /opt/ruby
 chmod -R g+w /opt/ruby
 
-# Install RubyGems 2.0.3
-wget http://production.cf.rubygems.org/rubygems/rubygems-2.0.3.tgz
-tar xzf rubygems-2.0.3.tgz
-cd rubygems-2.0.3
+# Install RubyGems 2.2.0
+wget http://production.cf.rubygems.org/rubygems/rubygems-2.2.0.tgz
+tar xzf rubygems-2.2.0.tgz
+cd rubygems-2.2.0
 /opt/ruby/bin/ruby setup.rb
 cd ..
-rm -rf rubygems-2.0.3*
+rm -rf rubygems-2.2.0*
 
 # Installing chef & Puppet
 /opt/ruby/bin/gem install chef --no-ri --no-rdoc
